@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Administração · Sala de Reunião</title>
+<meta name="theme-color" content="#1F326A">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231F326A'/%3E%3Ctext x='32' y='42' font-family='Arial' font-weight='bold' font-size='26' text-anchor='middle' fill='%23F2A638'%3ECT%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+:root{
+  --navy:#1F326A; --orange:#F2A638; --teal:#24ABC9; --green:#92C23B; --gray:#727176;
+  --bg:#F3F5FA; --card:#FFFFFF; --soft:#EEF2F9; --fg:#18203A; --muted:#5E6478; --line:#D9DFEC;
+  --pre:#A86A0A; --pre-soft:#FDF1DC; --val:#1E8AA6; --val-soft:#DDF3F8; --ok:#5E8A12; --ok-soft:#ECF5DC; --off:#8A8A92; --off-soft:#ECECEF; --err:#C2412D;
+  --band:#1F326A; --sel:#1F326A; --sel-fg:#fff;
+  --f-display:"Bricolage Grotesque","Trebuchet MS",sans-serif; --f-body:"Figtree","Segoe UI",system-ui,sans-serif; --f-mono:"JetBrains Mono",ui-monospace,monospace;
+  color-scheme:light}
+@media (prefers-color-scheme: dark){:root{
+  --bg:#0F1528; --card:#172039; --soft:#1E2947; --fg:#E8ECF6; --muted:#A3AAC0; --line:#2C3858;
+  --pre:#F2A638; --pre-soft:#3A2E17; --val:#4CC3DD; --val-soft:#123843; --ok:#A8D255; --ok-soft:#26341A; --off:#8D90A0; --off-soft:#262B3A; --err:#F07A63;
+  --band:#152349; --sel:#F2A638; --sel-fg:#1A1A1A; color-scheme:dark}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 var(--f-body)}
+.wrap{max-width:1100px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header{background:var(--band);color:#fff;padding-top:env(safe-area-inset-top,0px)}
+header .wrap{padding-block:16px 0;display:flex;flex-direction:column;gap:12px}
+.brand{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.brand h1{font:800 22px/1.1 var(--f-display);margin:0}
+.brand h1 small{display:block;font:500 13px var(--f-body);opacity:.75}
+.brand .acts{display:flex;gap:8px;flex-wrap:wrap}
+.hbtn{all:unset;cursor:pointer;font-size:13px;font-weight:600;padding:8px 12px;border-radius:9px;background:rgba(255,255,255,.12);color:#fff}
+.tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+.tabs button{all:unset;cursor:pointer;padding:10px 14px;border-radius:10px 10px 0 0;font-weight:600;color:rgba(255,255,255,.75);white-space:nowrap}
+.tabs button[aria-selected="true"]{background:var(--bg);color:var(--fg)}
+.tabs button .n{display:inline-block;min-width:20px;padding:0 6px;margin-left:6px;border-radius:99px;background:var(--orange);color:#1F326A;font-size:12px;text-align:center}
+main .wrap{padding-block:20px 60px;display:flex;flex-direction:column;gap:16px}
+h2{font:700 19px/1.2 var(--f-display);margin:0}
+h3{font:700 15px/1.3 var(--f-body);margin:0}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.kpi b{display:block;font:800 26px/1.1 var(--f-display);font-variant-numeric:tabular-nums}
+.kpi span{font-size:12px;color:var(--muted)}
+.kpi.alerta{border-color:var(--teal)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.between{justify-content:space-between}
+.btn{all:unset;cursor:pointer;padding:9px 14px;border-radius:10px;font-weight:600;background:var(--soft);color:var(--fg);border:1px solid var(--line);text-align:center;font-size:14px;display:inline-flex;gap:6px;align-items:center;justify-content:center}
+.btn.primary{background:var(--navy);color:#fff;border-color:var(--navy)}
+.btn.ok{background:var(--green);color:#1B2A06;border-color:var(--green)}
+.btn.warn{background:var(--orange);color:#1F326A;border-color:var(--orange)}
+.btn.danger{color:var(--err);border-color:var(--err);background:none}
+.btn.small{padding:6px 10px;font-size:13px}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.btn:focus-visible,.seg button:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg button{all:unset;cursor:pointer;padding:7px 12px;border-radius:99px;border:1px solid var(--line);background:var(--card);font-size:13px;font-weight:600}
+.seg button[aria-pressed="true"]{background:var(--sel);color:var(--sel-fg);border-color:var(--sel)}
+.list{display:flex;flex-direction:column;gap:10px}
+.res{display:grid;grid-template-columns:92px 1fr auto;gap:12px;align-items:start;border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--card);border-left:4px solid var(--line)}
+.res.pre{border-left-color:var(--orange)} .res.validacao{border-left-color:var(--teal);background:var(--val-soft)} .res.confirmada{border-left-color:var(--green)}
+.res .when{font-variant-numeric:tabular-nums}
+.res .when b{display:block;font:700 15px var(--f-mono)}
+.res .when span{font-size:12px;color:var(--muted)}
+.res .who b{font-size:15px}
+.res .who div{font-size:13px;color:var(--muted)}
+.res .val{text-align:right;font-variant-numeric:tabular-nums;font-weight:700}
+.res .val small{display:block;font-weight:500;color:var(--muted);font-size:12px;max-width:180px}
+.res .acts{grid-column:1/-1;display:flex;gap:8px;flex-wrap:wrap}
+@media (max-width:620px){.res{grid-template-columns:1fr auto}.res .when{grid-column:1/-1;display:flex;gap:8px;align-items:baseline}}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;padding:2px 9px;border-radius:999px;white-space:nowrap}
+.pill::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.st-pre{background:var(--pre-soft);color:var(--pre)} .st-validacao{background:var(--val-soft);color:var(--val)} .st-confirmada{background:var(--ok-soft);color:var(--ok)}
+.st-cancelada,.st-expirada,.st-derrubada,.st-credito,.st-recusada,.st-desistiu{background:var(--off-soft);color:var(--off)}
+.empty{color:var(--muted);padding:12px 0}
+.note{font-size:13px;color:var(--muted);background:var(--soft);border-radius:10px;padding:10px 12px}
+.note b{color:var(--fg)}
+.msg{padding:10px 12px;border-radius:10px;font-size:14px;font-weight:600}
+.msg.ok{background:var(--ok-soft);color:var(--ok)} .msg.err{background:#FBE6E2;color:#9B2C1C}
+@media (prefers-color-scheme: dark){.msg.err{background:#3A1F1A;color:#F07A63}}
+label{display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:600;color:var(--muted)}
+input,select{font:15px var(--f-body);padding:9px 11px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--fg);min-width:0;width:100%}
+input[type=checkbox]{width:20px;height:20px;accent-color:var(--navy)}
+input:focus,select:focus{outline:2px solid var(--teal);border-color:transparent}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.tablewrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th{text-align:left;font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);padding:8px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:8px;border-bottom:1px solid var(--line);vertical-align:middle}
+td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.bar{height:8px;border-radius:99px;background:var(--soft);overflow:hidden;min-width:100px}
+.bar i{display:block;height:100%;background:var(--teal)} .bar.full i{background:var(--err)}
+.week{display:grid;grid-template-columns:40px repeat(7,minmax(100px,1fr));min-width:760px}
+.week .hc{font:500 11px var(--f-mono);color:var(--muted);height:34px;border-top:1px solid var(--line);padding-right:6px;text-align:right}
+.week .dh{text-align:center;font-size:12px;font-weight:700;padding:6px 0;color:var(--muted);border-bottom:1px solid var(--line)}
+.week .dh.hoje{color:var(--fg);background:var(--soft);border-radius:8px 8px 0 0}
+.week .col{position:relative;border-left:1px solid var(--line)}
+.week .ln{height:34px;border-top:1px solid var(--line)}
+.ev{position:absolute;left:3px;right:3px;border-radius:6px;padding:2px 6px;font-size:11px;line-height:1.25;overflow:hidden;border-left:3px solid;background:var(--soft);color:var(--fg)}
+.ev b{display:block;font-size:12px}
+.ev.confirmada{background:var(--ok-soft);border-color:var(--green)} .ev.validacao{background:var(--val-soft);border-color:var(--teal)}
+.ev.pre{background:var(--pre-soft);border-color:var(--orange)} .ev.externo{background:var(--off-soft);border-color:var(--gray)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-2px}
+.login{max-width:380px;margin:40px auto}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--navy);color:#fff;padding:10px 16px;border-radius:10px;font-weight:600;z-index:20;max-width:calc(100% - 32px)}
+.spinner{width:16px;height:16px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:sp .7s linear infinite;display:inline-block}
+@keyframes sp{to{transform:rotate(360deg)}}
+.avisar{display:flex;flex-direction:column;gap:8px;background:var(--ok-soft);border:1px solid var(--ok);border-radius:12px;padding:12px}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <div class="brand"><h1>Sala de Reunião<small>Administração · Coworking Together</small></h1>
+    <div class="acts"><button class="hbtn" id="atualizar">Atualizar</button><a class="hbtn" id="lk-cliente" href="./" target="_blank" rel="noopener">Página do cliente</a></div></div>
+  <nav class="tabs" id="tabs"></nav>
+</div></header>
+<main><div class="wrap" id="app"><p class="empty">Carregando…</p></div></main>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+/* ========= ENDEREÇO DO SERVIDOR (o mesmo da página do cliente) ========= */
+const API = "https://script.google.com/macros/s/AKfycbzC49gvG15P6JSyEA0t4NWREF1OBKN6sGCIgNggEFgXxFlt49ezA7S5_jO2OmpirmkPkQ/exec";
+/* ======================================================================= */
+
+const MIN=60000,H=3600000,OFF=-3*H,$=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const brl=v=>Number(v||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+const pad=n=>String(n).padStart(2,"0");
+const P=ms=>{const d=new Date(ms+OFF);return{dow:d.getUTCDay(),min:d.getUTCHours()*60+d.getUTCMinutes(),dia:d.getUTCDate(),mes:d.getUTCMonth(),ano:d.getUTCFullYear(),key:d.getUTCFullYear()+"-"+pad(d.getUTCMonth()+1)+"-"+pad(d.getUTCDate())}};
+const hm=ms=>{const m=P(ms).min;return pad(Math.floor(m/60))+":"+pad(m%60)};
+const dia0=key=>{const[y,m,d]=key.split("-").map(Number);return Date.UTC(y,m-1,d)-OFF};
+const DS=["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"],DL=["domingo","segunda","terça","quarta","quinta","sexta","sábado"];
+const fmtDia=ms=>{const p=P(ms);return DS[p.dow]+" "+pad(p.dia)+"/"+pad(p.mes+1)};
+const hTxt=h=>(Math.round(h*10)/10).toLocaleString("pt-BR")+"h";
+const ROT={pre:"Pré-reserva",validacao:"Validar PIX",confirmada:"Confirmada",cancelada:"Cancelada",credito:"Cancelada · crédito",expirada:"Expirada",derrubada:"Derrubada",recusada:"Recusada",desistiu:"Desistiu"};
+
+/* ---------- acesso ---------- */
+let chave=null;
+(function(){const u=new URL(location.href),k=u.searchParams.get("k");
+  try{if(k){localStorage.setItem("chaveSala",k);u.searchParams.delete("k");history.replaceState(null,"",u.pathname+u.search+u.hash)}chave=localStorage.getItem("chaveSala")}catch(e){chave=k}})();
+
+async function api(metodo,dados){
+  const corpo={...dados,chave};
+  let resp;
+  try{
+    if(metodo==="GET")resp=await fetch(API+"?"+new URLSearchParams({...corpo,_:Date.now()}));
+    else resp=await fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(corpo)});
+  }catch(e){throw new Error("Sem conexão com o servidor. Confira a internet e tente de novo.")}
+  const j=await resp.json();
+  if(!j.ok){if(/código de acesso/i.test(j.erro||"")){try{localStorage.removeItem("chaveSala")}catch(e){}chave=null}throw new Error(j.erro||"Erro")}
+  return j;
+}
+
+/* ---------- estado ---------- */
+let D=null,aba="reservas",filtro="proximas",avisos={},pendente={};
+async function carregar(){
+  if(!chave){telaLogin();return}
+  try{D=await api("GET",{acao:"admin"});render()}
+  catch(e){if(!chave)telaLogin(e.message);else $("#app").innerHTML=`<div class="msg err">${esc(e.message)}</div><button class="btn" onclick="carregar()">Tentar de novo</button>`}
+}
+function telaLogin(msg){
+  $("#tabs").innerHTML="";
+  $("#app").innerHTML=`<form class="panel login" id="f-login"><h2>Código de acesso</h2><p class="note">Use o código da administração gerado na instalação.</p>${msg?`<div class="msg err">${esc(msg)}</div>`:""}
+   <label>Código<input id="l-k" autocomplete="current-password" type="password"></label><button class="btn primary" type="submit">Entrar</button></form>`;
+  $("#f-login").onsubmit=e=>{e.preventDefault();chave=$("#l-k").value.trim();try{localStorage.setItem("chaveSala",chave)}catch(x){}carregar()};
+}
+
+/* ---------- render ---------- */
+function render(){
+  const nVal=D.reservas.filter(r=>r.status==="validacao").length;
+  const tabs=[["reservas","Reservas",nVal],["agenda","Agenda"],["internos","Clientes internos"],["precos","Preços e promoções"],["regras","Horários e regras"],["creditos","Créditos",D.creditos.filter(c=>!c.usadoEm).length]];
+  $("#tabs").innerHTML=tabs.map(([k,n,c])=>`<button role="tab" data-aba="${k}" aria-selected="${aba===k}">${n}${c?`<span class="n">${c}</span>`:""}</button>`).join("");
+  document.querySelectorAll("[data-aba]").forEach(b=>b.onclick=()=>{aba=b.dataset.aba;render()});
+  $("#app").innerHTML=({reservas:vReservas,agenda:vAgenda,internos:vInternos,precos:vPrecos,regras:vRegras,creditos:vCreditos})[aba]();
+  bind();
+}
+
+function vReservas(){
+  const ag=D.agora,mes=P(ag);
+  const doMes=D.reservas.filter(r=>{const p=P(r.inicio);return p.mes===mes.mes&&p.ano===mes.ano&&r.status==="confirmada"});
+  const rec=doMes.reduce((s,r)=>s+r.valor,0),horas=doMes.reduce((s,r)=>s+(r.fim-r.inicio)/H,0);
+  const hojeKey=P(ag).key;
+  const nVal=D.reservas.filter(r=>r.status==="validacao").length,nPre=D.reservas.filter(r=>r.status==="pre").length;
+  let L=D.reservas.slice().sort((a,b)=>a.inicio-b.inicio);
+  if(filtro==="validar")L=L.filter(r=>r.status==="validacao");
+  else if(filtro==="hoje")L=L.filter(r=>P(r.inicio).key===hojeKey&&["pre","validacao","confirmada"].includes(r.status));
+  else if(filtro==="proximas")L=L.filter(r=>r.fim>ag&&["pre","validacao","confirmada"].includes(r.status));
+  else L=L.reverse();
+  return `<div class="kpis"><div class="kpi ${nVal?"alerta":""}"><b>${nVal}</b><span>comprovantes para validar</span></div><div class="kpi"><b>${nPre}</b><span>pré-reservas sem pagamento</span></div><div class="kpi"><b>${hTxt(horas)}</b><span>horas confirmadas no mês</span></div><div class="kpi"><b>${brl(rec)}</b><span>vendido no mês (confirmadas)</span></div></div>
+  <div class="panel"><div class="row between"><h2>Reservas</h2><div class="seg">${[["validar","Para validar"],["hoje","Hoje"],["proximas","Próximas"],["todas","Histórico"]].map(([k,n])=>`<button data-filtro="${k}" aria-pressed="${filtro===k}">${n}</button>`).join("")}</div></div>
+  <div class="list">${L.length?L.map(cardRes).join(""):`<p class="empty">Nenhuma reserva neste filtro.</p>`}</div>
+  <p class="note">Reservas colocadas à mão na agenda Google "Sala de Reunião" também bloqueiam o horário para os clientes. <a href="${esc(D.planilha)}" target="_blank" rel="noopener">Abrir planilha de reservas</a> · <a href="${esc(D.pasta)}" target="_blank" rel="noopener">Pasta de comprovantes</a></p></div>`;
+}
+function cardRes(r){
+  const ativo=["pre","validacao","confirmada"].includes(r.status)&&r.fim>D.agora;
+  const ant=(r.inicio-D.agora)/H,pago=r.valor>0&&["validacao","confirmada"].includes(r.status);
+  const cfg=D.config;
+  const expira=r.status==="pre"?Math.max(0,r.criadoEm+cfg.expiraHoras*H-D.agora):0;
+  const wa="https://wa.me/55"+String(r.whats).replace(/\D/g,"").replace(/^55/,"");
+  const pend=pendente[r.id];
+  let acts="";
+  if(r.status==="validacao")acts+=`<button class="btn ok small" data-a="confirmar" data-id="${r.id}">Confirmar PIX</button><button class="btn small" data-a="recusar" data-id="${r.id}">Recusar comprovante</button>`;
+  if(r.status==="pre")acts+=`<button class="btn small" data-a="confirmar" data-id="${r.id}">Confirmar (pagou por fora)</button>`;
+  if(r.comprovante)acts+=`<a class="btn small" href="${esc(r.comprovante)}" target="_blank" rel="noopener">📎 Comprovante</a>`;
+  acts+=`<a class="btn small" href="${wa}" target="_blank" rel="noopener">💬 WhatsApp</a>`;
+  if(ativo)acts+=pend==="cancelar"?`<span class="note" style="flex-basis:100%">${pago&&ant<cfg.cancelaHoras?`Faltam menos de ${cfg.cancelaHoras}h: pela política, o valor vira <b>crédito</b> do cliente.`:pago?`Faltam mais de ${cfg.cancelaHoras}h: o cliente tem direito a <b>reembolso de ${brl(r.valor)}</b> (faça o PIX de volta).`:"Sem pagamento registrado."}</span><button class="btn danger small" data-a="cancelar" data-id="${r.id}">Confirmar cancelamento</button>${pago&&ant<cfg.cancelaHoras?`<button class="btn small" data-a="cancelar-reembolso" data-id="${r.id}">Cancelar com reembolso (exceção)</button>`:""}<button class="btn small" data-a="nao" data-id="${r.id}">Voltar</button>`
+    :`<button class="btn danger small" data-a="pre-cancelar" data-id="${r.id}">Cancelar</button>`;
+  const av=avisos[r.id];
+  return `<div class="res ${r.status}"><div class="when"><b>${hm(r.inicio)}–${hm(r.fim)}</b><span>${fmtDia(r.inicio)}</span></div>
+   <div class="who"><b>${esc(r.nome)}</b> <span class="pill st-${r.status}">${ROT[r.status]||r.status}</span>${r.status==="pre"?` <span style="font-size:12px;color:var(--muted)">expira em ${Math.floor(expira/H)}h${pad(Math.floor(expira%H/MIN))}</span>`:""}
+    <div>${esc(r.whats)}${r.email?" · "+esc(r.email):""}${r.empresa?" · "+esc(r.empresa):""}</div>${r.motivo?`<div>${esc(r.motivo)}</div>`:""}${r.tipo==="interno"?`<div>Cliente interno ${esc(r.codigo)} · ${hTxt(r.horasPlano)} do plano</div>`:""}${r.obs?`<div>Obs.: ${esc(r.obs)}</div>`:""}</div>
+   <div class="val">${brl(r.valor)}<small>${esc(r.regra||"")}</small><small>${esc(r.id)}</small></div>
+   ${av?`<div class="avisar" style="grid-column:1/-1"><b>${esc(av.titulo)}</b><a class="btn ok" href="${esc(av.link)}" target="_blank" rel="noopener">💬 Enviar mensagem pronta no WhatsApp do cliente</a></div>`:""}
+   <div class="acts">${acts}</div></div>`;
+}
+async function acao(a,id){
+  if(a==="pre-cancelar"){pendente[id]="cancelar";render();return}
+  if(a==="nao"){delete pendente[id];render();return}
+  const btn=document.querySelector(`[data-a="${a}"][data-id="${id}"]`);if(btn){btn.disabled=true;btn.innerHTML=`<span class="spinner"></span>`}
+  try{
+    let j;
+    if(a==="confirmar"){j=await api("POST",{acao:"confirmar",id});avisos[id]={titulo:"Reserva confirmada. Avise o cliente:",link:j.avisar};toast("Reserva confirmada")}
+    if(a==="recusar"){j=await api("POST",{acao:"recusar",id,motivo:"Pagamento não identificado"});avisos[id]={titulo:"Comprovante recusado. Fale com o cliente:",link:j.avisar};toast("Comprovante recusado; horário liberado")}
+    if(a==="cancelar"||a==="cancelar-reembolso"){j=await api("POST",{acao:"cancelar",id,modo:a==="cancelar-reembolso"?"reembolso":""});delete pendente[id];avisos[id]={titulo:j.status==="credito"?"Cancelada. O valor virou crédito. Avise o cliente:":"Cancelada. Avise o cliente:",link:j.avisar};toast("Reserva cancelada")}
+    const keep=avisos;D=await api("GET",{acao:"admin"});avisos=keep;render();
+  }catch(e){toast(e.message);render()}
+}
+
+function vAgenda(){
+  if(window._sem===undefined)window._sem=0;
+  const hoje=P(D.agora),ini=dia0(hoje.key)-hoje.dow*24*H+window._sem*7*24*H;
+  const ds=[...Array(7)].map((_,i)=>P(ini+i*24*H+12*H).key);
+  const h0=7,h1=22,px=34;
+  const evs=D.reservas.filter(r=>["pre","validacao","confirmada"].includes(r.status)).map(r=>({...r,cls:r.status,t:r.nome})).concat(D.externos.map(e=>({inicio:e.ini,fim:e.fim,cls:"externo",t:e.titulo})));
+  const cols=ds.map(k=>`<div class="col">${[...Array(h1-h0)].map(()=>`<div class="ln"></div>`).join("")}${evs.filter(e=>P(e.inicio).key===k).map(e=>{const p=P(e.inicio),top=(p.min/60-h0)*px,ht=Math.max((e.fim-e.inicio)/H*px-2,18);return `<div class="ev ${e.cls}" style="top:${top}px;height:${ht}px"><b>${esc(e.t)}</b>${hm(e.inicio)}–${hm(e.fim)}</div>`}).join("")}</div>`).join("");
+  return `<div class="panel"><div class="row between"><h2>Semana de ${fmtDia(dia0(ds[0])+12*H)} a ${fmtDia(dia0(ds[6])+12*H)}</h2><div class="row"><button class="btn small" data-sem="-1">← Anterior</button><button class="btn small" data-sem="0">Hoje</button><button class="btn small" data-sem="1">Próxima →</button></div></div>
+  <div class="legend"><span><i style="background:var(--ok-soft);border-left:3px solid var(--green)"></i>Confirmada</span><span><i style="background:var(--val-soft);border-left:3px solid var(--teal)"></i>Validar PIX</span><span><i style="background:var(--pre-soft);border-left:3px solid var(--orange)"></i>Pré-reserva (não trava)</span><span><i style="background:var(--off-soft);border-left:3px solid var(--gray)"></i>Colocada à mão na agenda</span></div>
+  <div class="tablewrap"><div class="week"><div></div>${ds.map(k=>{const p=P(dia0(k)+12*H);return `<div class="dh ${k===hoje.key?"hoje":""}">${DS[p.dow]} ${pad(p.dia)}</div>`}).join("")}<div>${[...Array(h1-h0)].map((_,i)=>`<div class="hc">${pad(h0+i)}h</div>`).join("")}</div>${cols}</div></div></div>`;
+}
+
+function vInternos(){
+  const c=D.config;
+  return `<div class="panel"><h2>Clientes internos</h2><p class="note">Cada cliente tem <b>${hTxt(c.horasInternas)} por mês</b>, sem acumular para o mês seguinte. Na reserva, ele marca "Sou cliente do Coworking" e digita o código; o que passar das horas do plano é cobrado no preço normal. Para um cliente com outro limite, preencha "Horas/mês"; para sem limite, escreva "ilimitado".</p>
+  <div class="tablewrap"><table><tr><th>Cliente</th><th>Código</th><th>WhatsApp</th><th>Uso neste mês</th><th>Situação</th><th></th></tr>
+  ${D.internos.length?D.internos.map(i=>{const lim=i.limite,pct=lim?Math.min(100,i.usoMes/lim*100):0;return `<tr><td><b>${esc(i.nome)}</b>${i.email?`<br><span style="font-size:12px;color:var(--muted)">${esc(i.email)}</span>`:""}</td><td style="font-family:var(--f-mono)">${esc(i.codigo)}</td><td>${esc(i.whats)}</td>
+   <td>${lim===null?`${hTxt(i.usoMes)} · sem limite`:`<div class="bar ${pct>=100?"full":""}"><i style="width:${pct}%"></i></div><span style="font-size:13px" class="num">${hTxt(i.usoMes)} de ${hTxt(lim)} · restam ${hTxt(Math.max(0,lim-i.usoMes))}</span>`}</td>
+   <td>${i.ativo?"Ativo":"Inativo"}</td><td><div class="row"><button class="btn small" data-edit="${esc(i.codigo)}">Editar</button><button class="btn small danger" data-del="${esc(i.codigo)}">${pendente["del"+i.codigo]?"Confirmar remoção":"Remover"}</button></div></td></tr>`}).join(""):`<tr><td colspan="6" class="empty">Nenhum cliente interno cadastrado.</td></tr>`}</table></div></div>
+  <form class="panel" id="f-int"><h3>${window._edit?"Editar cliente "+esc(window._edit.codigo):"Cadastrar cliente interno"}</h3><div class="grid">
+   <label>Nome / empresa<input id="i-nome" required value="${esc(window._edit?.nome||"")}" placeholder="Ex.: Sala 07 · Pedro Silva"></label>
+   <label>Código (o cliente digita na reserva)<input id="i-cod" required value="${esc(window._edit?.codigo||"")}" placeholder="Ex.: S07-2026"></label>
+   <label>WhatsApp<input id="i-wa" value="${esc(window._edit?.whats||"")}"></label>
+   <label>E-mail<input id="i-em" type="email" value="${esc(window._edit?.email||"")}"></label>
+   <label>Horas/mês (vazio = ${hTxt(c.horasInternas)})<input id="i-h" value="${esc(window._edit?.horas||"")}" placeholder="padrão"></label>
+   <label style="flex-direction:row;align-items:center;gap:8px;color:var(--fg)"><input type="checkbox" id="i-at" ${window._edit?.ativo===false?"":"checked"}> Ativo</label></div>
+   <div class="row"><button class="btn primary" type="submit">${window._edit?"Salvar alterações":"Cadastrar"}</button>${window._edit?`<button class="btn" type="button" id="i-cancel">Cancelar edição</button>`:""}</div></form>`;
+}
+
+function vPrecos(){
+  const c=D.config;
+  return `<form class="panel" id="f-precos"><h2>Preços</h2><div class="grid">
+   <label>Hora no horário comercial (R$)<input type="number" min="0" step="0.01" id="p-c" value="${c.precoComercial}"></label>
+   <label>Hora fora do horário comercial (R$)<input type="number" min="0" step="0.01" id="p-f" value="${c.precoFora}"></label></div>
+   <h3>Pacotes</h3><p class="note">O sistema cobra sozinho o menor valor: se as horas avulsas saírem mais caras que um pacote que cubra a reserva, vale o pacote. Um pacote também aparece como opção de duração para o cliente.</p>
+   <div class="tablewrap"><table><tr><th>Nome</th><th>Horas</th><th>Valor (R$)</th><th></th></tr>${c.pacotes.map((p,i)=>`<tr><td><input id="pk-n${i}" value="${esc(p.nome)}"></td><td><input id="pk-h${i}" type="number" min="0.5" step="0.5" value="${p.horas}"></td><td><input id="pk-v${i}" type="number" min="0" step="0.01" value="${p.valor}"></td><td><button class="btn small danger" type="button" data-pk-del="${i}">Remover</button></td></tr>`).join("")}</table></div>
+   <div class="row"><button class="btn small" type="button" id="pk-add">Adicionar pacote</button></div>
+   <h3>Durações que o cliente pode escolher (horas, separadas por vírgula)</h3>
+   <label>Ex.: 1, 1.5, 2, 3, 4, 10<input id="p-dur" value="${c.duracoes.join(", ")}"></label>
+   <div class="row"><button class="btn primary" type="submit">Salvar preços</button></div></form>
+  <div class="panel"><h2>Promoções por data</h2>
+   <div class="tablewrap"><table><tr><th>Data</th><th>Nome</th><th>Desconto</th><th></th></tr>${c.promos.length?c.promos.slice().sort((a,b)=>a.data<b.data?-1:1).map(p=>`<tr><td class="num">${p.data.split("-").reverse().join("/")}</td><td>${esc(p.nome)}</td><td class="num">${p.desconto}%</td><td><button class="btn small danger" data-pr-del="${esc(p.data)}">Remover</button></td></tr>`).join(""):`<tr><td colspan="4" class="empty">Nenhuma promoção cadastrada.</td></tr>`}</table></div>
+   <form class="grid" id="f-promo"><label>Data<input type="date" id="pr-d" required></label><label>Nome<input id="pr-n" required placeholder="Ex.: Sexta promocional"></label><label>Desconto (%)<input type="number" min="1" max="100" id="pr-p" required value="15"></label><div style="display:flex;align-items:end"><button class="btn primary" type="submit">Criar promoção</button></div></form></div>`;
+}
+
+function vRegras(){
+  const c=D.config;
+  return `<form class="panel" id="f-hor"><h2>Horários de funcionamento</h2><p class="note">Entre "abre" e "fecha" a sala aparece para reserva. Fora do horário comercial vale o preço "fora do horário".</p>
+  <div class="tablewrap"><table><tr><th>Dia</th><th>Aberto</th><th>Abre</th><th>Comercial de</th><th>até</th><th>Fecha</th></tr>
+  ${c.horarios.map((h,i)=>`<tr><td><b>${DL[i]}</b></td><td><input type="checkbox" id="h-a${i}" ${h.aberto?"checked":""}></td>${["abre","comIni","comFim","fecha"].map(k=>`<td><input type="time" step="1800" id="h-${k}${i}" value="${h[k]}"></td>`).join("")}</tr>`).join("")}</table></div>
+  <h2>Regras</h2><div class="grid">
+   <label>Duração mínima (minutos)<input type="number" step="30" min="30" id="r-dm" value="${c.duracaoMin}"></label>
+   <label>Intervalo de limpeza (minutos)<input type="number" step="5" min="0" id="r-iv" value="${c.intervalo}"></label>
+   <label>Validade da pré-reserva (horas)<input type="number" min="1" step="0.5" id="r-ex" value="${c.expiraHoras}"></label>
+   <label>Antecedência para reembolso (horas)<input type="number" min="0" id="r-cx" value="${c.cancelaHoras}"></label>
+   <label>Horas mensais do cliente interno<input type="number" min="0" step="0.5" id="r-hi" value="${c.horasInternas}"></label>
+   <label>Reservas até quantos dias à frente<input type="number" min="1" max="90" id="r-da" value="${c.diasAntecedencia}"></label>
+   <label>Pré-reservas abertas por cliente<input type="number" min="1" id="r-mp" value="${c.maxPrePorCliente}"></label>
+   <label>Endereço (vai na confirmação)<input id="r-end" value="${esc(c.endereco)}"></label></div>
+  <h2>Avisos</h2><div class="grid">
+   <label>WhatsApp que recebe os avisos (55 + DDD + número)<input id="w-n" inputmode="numeric" value="${esc(c.whatsapp)}"></label>
+   <label>Chave do CallMeBot<input id="w-k" value="${esc(c.callmebotKey)}" placeholder="recebida no WhatsApp ao ativar"></label>
+   <label>Cópia dos avisos por e-mail (opcional)<input id="w-e" type="email" value="${esc(c.emailAvisos)}"></label></div>
+  <p class="note">Para ativar o CallMeBot: no celular do Coworking, abra <b>callmebot.com/blog/free-api-whatsapp-messages</b>, salve o número do bot que aparece lá, mande para ele a mensagem <b>I allow callmebot to send me messages</b> e cole aqui a chave (apikey) que ele responder.</p>
+  <h2>PIX</h2><div class="grid">
+   <label>Chave PIX<input id="x-k" value="${esc(c.pix.chave)}"></label><label>Nome do recebedor<input id="x-n" value="${esc(c.pix.nome)}"></label><label>Cidade<input id="x-c" value="${esc(c.pix.cidade)}"></label></div>
+  <div class="row"><button class="btn primary" type="submit">Salvar horários e regras</button><button class="btn" type="button" id="w-test">Enviar WhatsApp de teste</button></div></form>`;
+}
+
+function vCreditos(){
+  return `<div class="panel"><h2>Créditos de clientes</h2><p class="note">Gerados quando uma reserva paga é cancelada com menos de ${D.config.cancelaHoras}h de antecedência. Quando o cliente usar o crédito, confirme a nova reserva dele como "pagou por fora" e marque o crédito como usado.</p>
+  <div class="tablewrap"><table><tr><th>Cliente</th><th>WhatsApp</th><th>Origem</th><th>Valor</th><th>Situação</th><th></th></tr>
+  ${D.creditos.length?D.creditos.slice().reverse().map(c=>`<tr><td>${esc(c.nome)}</td><td>${esc(c.whats)}</td><td>${esc(c.origem)}</td><td class="num">${brl(c.valor)}</td><td>${c.usadoEm?"Usado"+(typeof c.usadoEm==="number"?" em "+fmtDia(c.usadoEm):""):"<b>Disponível</b>"}</td><td>${c.usadoEm?"":`<button class="btn small" data-cred="${c.linha}">Marcar como usado</button>`}</td></tr>`).join(""):`<tr><td colspan="6" class="empty">Nenhum crédito.</td></tr>`}</table></div></div>`;
+}
+
+/* ---------- eventos ---------- */
+function bind(){
+  document.querySelectorAll("[data-filtro]").forEach(b=>b.onclick=()=>{filtro=b.dataset.filtro;render()});
+  document.querySelectorAll("[data-a]").forEach(b=>b.onclick=()=>acao(b.dataset.a,b.dataset.id));
+  document.querySelectorAll("[data-sem]").forEach(b=>b.onclick=()=>{window._sem=b.dataset.sem==="0"?0:window._sem+Number(b.dataset.sem);render()});
+  document.querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>{window._edit=D.internos.find(i=>i.codigo===b.dataset.edit);render();$("#i-nome").focus()});
+  document.querySelectorAll("[data-del]").forEach(b=>b.onclick=async()=>{const k="del"+b.dataset.del;if(!pendente[k]){pendente[k]=1;render();return}delete pendente[k];await salvar({acao:"removerInterno",codigo:b.dataset.del},"Cliente removido")});
+  const ic=$("#i-cancel");if(ic)ic.onclick=()=>{window._edit=null;render()};
+  const fi=$("#f-int");if(fi)fi.onsubmit=async e=>{e.preventDefault();const orig=window._edit?.codigo;await salvar({acao:"salvarInterno",codigoOriginal:orig,interno:{nome:$("#i-nome").value.trim(),codigo:$("#i-cod").value.trim(),whats:$("#i-wa").value.trim(),email:$("#i-em").value.trim(),horas:$("#i-h").value.trim(),ativo:$("#i-at").checked}},"Cliente salvo");window._edit=null;render()};
+  const fp=$("#f-precos");if(fp)fp.onsubmit=async e=>{e.preventDefault();await salvarCfg({precoComercial:num("#p-c"),precoFora:num("#p-f"),pacotes:lerPacotes(),duracoes:$("#p-dur").value.split(/[,;\s]+/).map(x=>Number(x.replace(",","."))).filter(x=>x>0).sort((a,b)=>a-b)},"Preços salvos")};
+  const pa=$("#pk-add");if(pa)pa.onclick=()=>{D.config.pacotes=lerPacotes();D.config.pacotes.push({nome:"Novo pacote",horas:2,valor:90});render()};
+  document.querySelectorAll("[data-pk-del]").forEach(b=>b.onclick=()=>{D.config.pacotes=lerPacotes();D.config.pacotes.splice(+b.dataset.pkDel,1);render();toast("Clique em Salvar preços para gravar")});
+  const fpr=$("#f-promo");if(fpr)fpr.onsubmit=async e=>{e.preventDefault();const promos=D.config.promos.filter(p=>p.data!==$("#pr-d").value);promos.push({data:$("#pr-d").value,nome:$("#pr-n").value.trim(),desconto:Number($("#pr-p").value)});await salvarCfg({promos},"Promoção criada")};
+  document.querySelectorAll("[data-pr-del]").forEach(b=>b.onclick=()=>salvarCfg({promos:D.config.promos.filter(p=>p.data!==b.dataset.prDel)},"Promoção removida"));
+  const fh=$("#f-hor");if(fh)fh.onsubmit=async e=>{e.preventDefault();
+    const horarios=D.config.horarios.map((h,i)=>({aberto:$("#h-a"+i).checked,abre:$("#h-abre"+i).value,comIni:$("#h-comIni"+i).value,comFim:$("#h-comFim"+i).value,fecha:$("#h-fecha"+i).value}));
+    await salvarCfg({horarios,duracaoMin:num("#r-dm"),intervalo:num("#r-iv"),expiraHoras:num("#r-ex"),cancelaHoras:num("#r-cx"),horasInternas:num("#r-hi"),diasAntecedencia:num("#r-da"),maxPrePorCliente:num("#r-mp"),endereco:$("#r-end").value.trim(),
+      whatsapp:$("#w-n").value.replace(/\D/g,""),callmebotKey:$("#w-k").value.trim(),emailAvisos:$("#w-e").value.trim(),pix:{chave:$("#x-k").value.replace(/[^\w@.+-]/g,""),nome:$("#x-n").value.trim(),cidade:$("#x-c").value.trim()}},"Horários e regras salvos")};
+  const wt=$("#w-test");if(wt)wt.onclick=async()=>{wt.disabled=true;try{const j=await api("POST",{acao:"testarWhatsapp"});toast(j.enviado?"Mensagem de teste enviada":"Não enviou. Salve a chave do CallMeBot e confira o número.")}catch(e){toast(e.message)}wt.disabled=false};
+  document.querySelectorAll("[data-cred]").forEach(b=>b.onclick=()=>salvar({acao:"usarCredito",linha:b.dataset.cred},"Crédito marcado como usado"));
+}
+const num=s=>Number(String($(s).value).replace(",","."));
+function lerPacotes(){return D.config.pacotes.map((p,i)=>({nome:($("#pk-n"+i)?.value??p.nome).trim(),horas:Number($("#pk-h"+i)?.value??p.horas),valor:Number($("#pk-v"+i)?.value??p.valor)})).filter(p=>p.nome&&p.horas>0)}
+async function salvarCfg(parcial,ok){await salvar({acao:"salvarConfig",config:parcial},ok)}
+async function salvar(dados,ok){try{await api("POST",dados);D=await api("GET",{acao:"admin"});render();toast(ok)}catch(e){toast(e.message)}}
+let tt;function toast(t){const e=$("#toast");e.textContent=t;e.hidden=false;clearTimeout(tt);tt=setTimeout(()=>e.hidden=true,3200)}
+$("#atualizar").onclick=()=>{$("#app").innerHTML=`<p class="empty">Atualizando…</p>`;carregar()};
+setInterval(()=>{if(!document.hidden&&aba==="reservas"&&!Object.keys(pendente).length)api("GET",{acao:"admin"}).then(j=>{D=j;render()}).catch(()=>{})},120000);
+carregar();
+</script>
+</body>
+</html>

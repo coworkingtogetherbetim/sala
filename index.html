@@ -235,7 +235,7 @@ function tDados(){
   ${e.geral?`<div class="info erro">${esc(e.geral)}</div>`:""}
   <label class="field">Nome completo<input type="text" id="f-nome" autocomplete="name" autocapitalize="words" value="${esc(s.nome)}" class="${e.nome?"bad":""}">${e.nome?`<span class="err">${e.nome}</span>`:""}</label>
   <label class="field">WhatsApp<small>Usamos para confirmar a reserva.</small><input type="tel" id="f-whats" inputmode="tel" autocomplete="tel-national" placeholder="(31) 9 0000-0000" value="${esc(s.whats)}" class="${e.whats?"bad":""}">${e.whats?`<span class="err">${e.whats}</span>`:""}</label>
-  <label class="field">E-mail <small>opcional, para receber a confirmação por e-mail</small><input type="email" id="f-email" inputmode="email" autocomplete="email" value="${esc(s.email)}" class="${e.email?"bad":""}">${e.email?`<span class="err">${e.email}</span>`:""}</label>
+  <label class="field">E-mail<small>A confirmação da reserva chega por e-mail.</small><input type="email" id="f-email" inputmode="email" autocomplete="email" value="${esc(s.email)}" class="${e.email?"bad":""}">${e.email?`<span class="err">${e.email}</span>`:""}</label>
   <label class="field">Empresa <small>opcional</small><input type="text" id="f-emp" autocomplete="organization" value="${esc(s.emp)}"></label>
   <label class="field">Motivo da reunião <small>opcional</small><input type="text" id="f-mot" value="${esc(s.motivo)}"></label>
   <label class="check"><input type="checkbox" id="f-int" ${s.interno?"checked":""}><span>Sou cliente do Coworking<small>Use as horas do seu plano com o código da recepção.</small></span></label>
@@ -304,7 +304,7 @@ async function avancar(){
   if(s.tela==="dados"){lerDados();s.erro={};
     if(s.nome.split(/\s+/).filter(Boolean).length<2)s.erro.nome="Digite nome e sobrenome.";
     if(s.whats.replace(/\D/g,"").length<10)s.erro.whats="Digite o WhatsApp com DDD.";
-    if(s.email&&!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(s.email))s.erro.email="Confira o e-mail.";
+    if(!s.email)s.erro.email="Digite seu e-mail para receber a confirmação.";else if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(s.email))s.erro.email="Confira o e-mail digitado.";
     if(s.interno&&!s.cod)s.erro.cod="Digite o código do cliente.";
     if(Object.keys(s.erro).length){render();return}
     s.enviando=true;barra();

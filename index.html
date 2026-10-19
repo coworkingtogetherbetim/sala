@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Reservar Sala de Reunião · Coworking Together</title>
+<meta name="description" content="Reserve a sala de reunião do Coworking Together em Betim. Escolha o horário e pague com PIX.">
+<meta name="theme-color" content="#1F326A">
+<meta property="og:title" content="Sala de Reunião · Coworking Together">
+<meta property="og:description" content="Escolha o horário, pague com PIX e receba a confirmação.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23F2A638'/%3E%3Ctext x='32' y='42' font-family='Arial' font-weight='bold' font-size='26' text-anchor='middle' fill='%231F326A'%3ECT%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Coluna única de celular (máx. 480px) + barra fixa no rodapé com resumo e botão principal */
+:root{
+  --navy:#1F326A; --orange:#F2A638; --teal:#24ABC9; --green:#92C23B;
+  --bg:#F3F5FA; --card:#FFFFFF; --soft:#E9EEF7; --fg:#18203A; --muted:#5E6478; --line:#D7DDEA;
+  --pick:#1F326A; --pick-fg:#FFFFFF; --warn:#A86A0A; --warn-soft:#FDF1DC; --ok:#5E8A12; --ok-soft:#EDF6DE; --err:#C2412D; --err-soft:#FBE6E2;
+  --band:#1F326A; --cta:#1F326A; --cta-fg:#FFFFFF;
+  --f-display:"Bricolage Grotesque","Trebuchet MS",sans-serif;
+  --f-body:"Figtree","Segoe UI",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root{
+  --bg:#0F1528; --card:#172039; --soft:#1F2A49; --fg:#E8ECF6; --muted:#A3AAC0; --line:#2C3858;
+  --pick:#F2A638; --pick-fg:#1A1A1A; --warn:#F2A638; --warn-soft:#3A2E17; --ok:#A8D255; --ok-soft:#26341A; --err:#F07A63; --err-soft:#3A1F1A;
+  --band:#152349; --cta:#F2A638; --cta-fg:#1A1A1A; color-scheme:dark}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.5 var(--f-body)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--band)}
+.col{max-width:480px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.top{background:var(--band);color:#fff;padding-top:env(safe-area-inset-top,0px)}
+.top .col{padding-block:18px 22px;display:flex;flex-direction:column;gap:6px}
+.brandrow{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:14px;opacity:.92}
+.logo i{width:30px;height:30px;border-radius:8px;background:var(--orange);color:#1F326A;display:grid;place-items:center;font:800 13px var(--f-display);font-style:normal}
+.top h1{font:800 28px/1.1 var(--f-display);margin:6px 0 0;text-wrap:balance}
+.top p{margin:0;font-size:14px;opacity:.82}
+.linkbtn{all:unset;cursor:pointer;font-size:14px;font-weight:600;text-decoration:underline;color:#fff;padding:8px 0}
+.linkbtn:focus-visible{outline:2px solid var(--orange)}
+main .col{padding-block:18px 150px;display:flex;flex-direction:column;gap:22px}
+.prog{height:4px;border-radius:9px;background:var(--soft);overflow:hidden}
+.prog i{display:block;height:100%;background:var(--orange);transition:width .25s}
+.eyebrow{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 -12px}
+h2{font:700 22px/1.2 var(--f-display);margin:0;text-wrap:balance}
+.block{display:flex;flex-direction:column;gap:10px}
+.block > b{font-size:15px}
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scroll-snap-type:x proximity;scroll-padding-inline:16px;margin-inline:-16px;padding-inline:16px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{all:unset;cursor:pointer;flex:0 0 auto;scroll-snap-align:start;min-height:48px;padding:8px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--card);text-align:center;font-weight:600;font-size:15px;display:flex;flex-direction:column;justify-content:center}
+.chip small{font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.chip.day{width:64px;padding:8px 0}
+.chip.day b{font:800 22px/1.1 var(--f-display)}
+.chip[aria-pressed="true"]{background:var(--pick);color:var(--pick-fg);border-color:var(--pick)}
+.chip[aria-pressed="true"] small{color:inherit;opacity:.85}
+.chip:disabled{opacity:.35;cursor:not-allowed}
+.chip .tag{color:var(--warn)}
+.chip:focus-visible,.time:focus-visible,.cta:focus-visible,.btn2:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+.times{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.time{all:unset;cursor:pointer;min-height:56px;border-radius:12px;border:1.5px solid var(--line);background:var(--card);padding:8px 12px;display:flex;flex-direction:column;justify-content:center}
+.time b{font:700 17px var(--f-mono)}
+.time span{font-size:13px;color:var(--muted)}
+.time .hot{color:var(--warn);font-weight:600}
+.time[aria-pressed="true"]{background:var(--pick);color:var(--pick-fg);border-color:var(--pick)}
+.time[aria-pressed="true"] span,.time[aria-pressed="true"] .hot{color:inherit;opacity:.9}
+.empty{background:var(--card);border:1px dashed var(--line);border-radius:12px;padding:16px;color:var(--muted);font-size:15px}
+.info{background:var(--soft);border-radius:12px;padding:12px 14px;font-size:14px;color:var(--muted)}
+.info b{color:var(--fg)}
+.info.warn{background:var(--warn-soft);color:var(--fg)}
+.info.erro{background:var(--err-soft);color:var(--fg);border:1px solid var(--err)}
+.field{display:flex;flex-direction:column;gap:6px;font-weight:600;font-size:15px}
+.field small{font-weight:500;color:var(--muted);font-size:13px}
+input[type=text],input[type=tel],input[type=email]{font:17px var(--f-body);min-height:52px;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;background:var(--card);color:var(--fg);width:100%}
+input:focus{outline:3px solid var(--teal);border-color:transparent}
+input.bad{border-color:var(--err)}
+.err{color:var(--err);font-size:14px;font-weight:600}
+.check{display:flex;gap:12px;align-items:flex-start;font-weight:600;padding:14px;border:1.5px solid var(--line);border-radius:12px;background:var(--card);cursor:pointer}
+.check input{width:22px;height:22px;margin:1px 0 0;accent-color:var(--navy);flex:0 0 auto}
+.check small{display:block;font-weight:500;color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:10px}
+.lines{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;font-size:15px;margin:0}
+.lines dt{color:var(--muted)} .lines dd{margin:0;text-align:right;font-variant-numeric:tabular-nums}
+.amount{font:800 40px/1 var(--f-display);font-variant-numeric:tabular-nums}
+.timer{display:inline-flex;gap:6px;align-items:center;background:var(--warn-soft);color:var(--warn);font:700 14px var(--f-mono);padding:6px 10px;border-radius:99px;width:max-content;max-width:100%}
+.howto{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px;counter-reset:s}
+.howto li{display:flex;gap:12px;align-items:flex-start;font-size:15px}
+.howto li::before{counter-increment:s;content:counter(s);flex:0 0 26px;height:26px;border-radius:50%;background:var(--navy);color:#fff;display:grid;place-items:center;font:700 13px var(--f-mono)}
+.code{font:500 12px/1.5 var(--f-mono);word-break:break-all;background:var(--soft);padding:10px;border-radius:10px;user-select:all;-webkit-user-select:all;max-height:84px;overflow:auto}
+.btn2{all:unset;cursor:pointer;min-height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:700;font-size:16px;background:var(--soft);color:var(--fg);border:1.5px solid var(--line);text-align:center;padding:0 16px}
+.btn2.copy{background:var(--orange);color:#1F326A;border-color:var(--orange)}
+.btn2.done{background:var(--ok-soft);color:var(--ok);border-color:var(--ok)}
+.btn2.ghost{background:none;border:none;min-height:44px;color:var(--muted);text-decoration:underline;font-weight:600}
+details summary{cursor:pointer;font-weight:600;color:var(--muted);font-size:14px;min-height:44px;display:flex;align-items:center}
+.qr{background:#fff;padding:12px;border-radius:12px;width:max-content;margin:6px auto 0}
+.upload{position:relative;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;border:2px dashed var(--line);border-radius:16px;padding:22px 16px;background:var(--card);cursor:pointer;font-weight:600}
+.upload input{position:absolute;opacity:0;width:1px;height:1px}
+.upload small{font-weight:500;color:var(--muted)}
+.upload.has{border-color:var(--ok);background:var(--ok-soft)}
+.upload:focus-within{outline:3px solid var(--teal)}
+.big-ok{width:64px;height:64px;border-radius:50%;background:var(--green);color:#1B2A06;display:grid;place-items:center;font-size:32px;font-weight:800;margin:0 auto}
+.big-ok.wait{background:var(--teal);color:#fff}
+.big-ok.no{background:var(--soft);color:var(--muted)}
+.center{text-align:center;align-items:center}
+.ref{font:700 22px var(--f-mono);letter-spacing:.05em}
+.bar{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);z-index:5;padding-bottom:calc(12px + env(safe-area-inset-bottom,0px));box-shadow:0 -6px 20px rgba(15,21,40,.08)}
+.bar .col{padding-block:12px 0;display:flex;gap:12px;align-items:center}
+.bar .sum{flex:1;min-width:0;font-size:13px;color:var(--muted);line-height:1.3}
+.bar .sum b{display:block;font:800 20px var(--f-display);color:var(--fg);font-variant-numeric:tabular-nums}
+.cta{all:unset;cursor:pointer;min-height:54px;padding:0 22px;border-radius:14px;background:var(--cta);color:var(--cta-fg);font-weight:700;font-size:17px;display:flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap}
+.cta.full{flex:1}
+.cta[aria-disabled="true"]{opacity:.4;cursor:not-allowed}
+.spinner{width:18px;height:18px;border:2.5px solid currentColor;border-right-color:transparent;border-radius:50%;animation:sp .7s linear infinite;flex:0 0 auto}
+@keyframes sp{to{transform:rotate(360deg)}}
+.loading{display:flex;gap:12px;align-items:center;justify-content:center;color:var(--muted);padding:40px 0}
+.skel{height:56px;border-radius:12px;background:linear-gradient(90deg,var(--soft),var(--card),var(--soft));background-size:200% 100%;animation:sk 1.2s infinite}
+@keyframes sk{to{background-position:-200% 0}}
+@media (prefers-reduced-motion:reduce){.spinner{animation-duration:2s}.skel{animation:none}.prog i{transition:none}}
+.resume{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+footer{font-size:13px;color:var(--muted);text-align:center}
+</style>
+</head>
+<body>
+<header class="top"><div class="col">
+  <div class="brandrow"><span class="logo"><i>CT</i>Coworking Together · Betim</span><button class="linkbtn" id="minha">Minha reserva</button></div>
+  <h1>Reserve a sala de reunião</h1>
+  <p>Escolha o horário, pague com PIX e receba a confirmação.</p>
+</div></header>
+
+<main><div class="col" id="app"><div class="loading"><span class="spinner"></span>Carregando horários…</div></div></main>
+<div class="bar" id="bar" hidden><div class="col" id="barin"></div></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+/* ========= ENDEREÇO DO SERVIDOR (Apps Script → Implantar → URL do app da Web) ========= */
+const API = "https://script.google.com/macros/s/AKfycbzC49gvG15P6JSyEA0t4NWREF1OBKN6sGCIgNggEFgXxFlt49ezA7S5_jO2OmpirmkPkQ/exec";
+/* ===================================================================================== */
+
+const MIN=60000,H=3600000,OFF=-3*H,$=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const brl=v=>Number(v).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+const pad=n=>String(n).padStart(2,"0");
+const P=ms=>{const d=new Date(ms+OFF);return{dow:d.getUTCDay(),min:d.getUTCHours()*60+d.getUTCMinutes(),dia:d.getUTCDate(),mes:d.getUTCMonth(),ano:d.getUTCFullYear(),key:d.getUTCFullYear()+"-"+pad(d.getUTCMonth()+1)+"-"+pad(d.getUTCDate())}};
+const hm=ms=>{const m=P(ms).min;return pad(Math.floor(m/60))+":"+pad(m%60)};
+const toMin=s=>{const[h,m]=String(s).split(":").map(Number);return h*60+(m||0)};
+const dia0=key=>{const[y,m,d]=key.split("-").map(Number);return Date.UTC(y,m-1,d)-OFF};
+const DS=["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"],DL=["domingo","segunda","terça","quarta","quinta","sexta","sábado"],MS=["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"];
+const fmtDia=ms=>{const p=P(ms);return DL[p.dow]+", "+pad(p.dia)+"/"+pad(p.mes+1)};
+const durFmt=h=>h<1?`${h*60} min`:(Number.isInteger(h)?`${h}h`:`${Math.floor(h)}h${pad(Math.round((h%1)*60))}`);
+let delta=0;const agora=()=>Date.now()+delta;
+
+let cfg=null,ocup=[],carregadoEm=0;
+const store={get(){try{return JSON.parse(localStorage.getItem("reservaSala")||"null")}catch(e){return null}},set(v){try{v?localStorage.setItem("reservaSala",JSON.stringify(v)):localStorage.removeItem("reservaSala")}catch(e){}}};
+
+/* ---------- comunicação com o servidor ---------- */
+async function api(metodo,dados,tentativas=2){
+  let ultimo;
+  for(let i=0;i<tentativas;i++){
+    try{
+      let resp;
+      if(metodo==="GET"){const q=new URLSearchParams({...dados,_:Date.now()});resp=await fetch(API+"?"+q,{method:"GET",redirect:"follow"})}
+      else resp=await fetch(API,{method:"POST",redirect:"follow",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(dados)});
+      const j=await resp.json();
+      if(!j.ok){const e=new Error(j.erro||"Não foi possível concluir.");e.publico=true;throw e}
+      if(j.agora)delta=j.agora-Date.now();
+      return j;
+    }catch(e){ultimo=e;if(e.publico)throw e;await new Promise(r=>setTimeout(r,900))}
+  }
+  const e=new Error("Sem conexão com o servidor. Confira sua internet e tente de novo.");e.rede=true;throw e;
+}
+async function carregar(silencioso){
+  try{const j=await api("GET",{acao:"disponibilidade"});cfg=j.config;ocup=j.ocupados;carregadoEm=Date.now();s.erroGeral=null}
+  catch(e){if(!silencioso)s.erroGeral=e.message}
+}
+
+/* ---------- regras (as mesmas do servidor; o servidor confere de novo) ---------- */
+const isCom=ms=>{const p=P(ms),h=cfg.horarios[p.dow];return h&&h.aberto&&p.min>=toMin(h.comIni)&&p.min<toMin(h.comFim)};
+function preco(ini,fim){let c=0,f=0;for(let t=ini;t<fim;t+=30*MIN)isCom(t)?c+=.5:f+=.5;
+  const av=c*cfg.precoComercial+f*cfg.precoFora,dur=(fim-ini)/H;let base=av,regra="";
+  (cfg.pacotes||[]).filter(p=>Number(p.horas)>=dur-1e-9).forEach(p=>{if(Number(p.valor)<base){base=Number(p.valor);regra=p.nome}});
+  const pr=(cfg.promos||[]).find(p=>p.data===P(ini).key);const desc=pr?base*pr.desconto/100:0;
+  return{base,regra,pr,total:Math.round((base-desc)*100)/100,dur}}
+const overlap=(a,b,c,d)=>a<d&&c<b;
+const bloqueado=(i,f)=>ocup.some(r=>r.t==="b"&&overlap(i,f,r.ini,r.fim));
+const temPre=(i,f)=>ocup.some(r=>r.t==="p"&&overlap(i,f,r.ini,r.fim));
+function dias(){const out=[],hoje=P(agora()).key;let d=dia0(hoje);for(let i=0;i<Math.min(cfg.diasAntecedencia,30);i++){out.push(P(d+12*H).key);d+=24*H}return out}
+function inicios(key,dur){const dow=P(dia0(key)+12*H).dow,h=cfg.horarios[dow];if(!h||!h.aberto)return[];const out=[];
+  for(let m=toMin(h.abre);m+dur*60<=toMin(h.fecha);m+=30){const i=dia0(key)+m*MIN,f=i+dur*H;if(i<=agora()+5*MIN)continue;if(!bloqueado(i,f))out.push({ini:i,fim:f,pre:temPre(i,f)})}return out}
+
+/* ---------- estado ---------- */
+const s={tela:"horario",dia:null,dur:null,sel:null,nome:"",whats:"",email:"",emp:"",motivo:"",interno:false,cod:"",res:null,arquivo:null,erro:{},ocupado:false,copiado:false};
+const TELAS=["horario","dados","pagar","fim"];
+function go(t){s.tela=t;render();window.scrollTo(0,0)}
+
+/* ---------- telas ---------- */
+function render(){
+  const app=$("#app"),i=TELAS.indexOf(s.tela);
+  if(!cfg){app.innerHTML=s.erroGeral?`<div class="info erro">${esc(s.erroGeral)}</div><button class="btn2" id="recarregar">Tentar de novo</button>`:`<div class="loading"><span class="spinner"></span>Carregando horários…</div>`;
+    const b=$("#recarregar");if(b)b.onclick=async()=>{s.erroGeral=null;render();await carregar();render()};$("#bar").hidden=true;return}
+  let h=i>=0?`<div class="prog" aria-hidden="true"><i style="width:${(i+1)/4*100}%"></i></div>`:"";
+  h+=({horario:tHorario,dados:tDados,pagar:tPagar,fim:tFim,consulta:tConsulta})[s.tela]();
+  h+=`<footer>${esc(cfg.endereco||"Coworking Together, Betim – MG")}<br>Dúvidas: WhatsApp ${fone(cfg.whatsapp)}</footer>`;
+  app.innerHTML=h;bind();barra();
+  if(s.tela==="pagar")qr();
+}
+const fone=n=>{const d=String(n).replace(/\D/g,"").replace(/^55/,"");return d.length===11?`(${d.slice(0,2)}) ${d.slice(2,7)}-${d.slice(7)}`:d};
+function tHorario(){
+  const ds=dias();
+  if(!s.dur)s.dur=cfg.duracoes.includes(2)?2:cfg.duracoes[0];
+  if(!s.dia||!ds.includes(s.dia))s.dia=ds.find(k=>inicios(k,cfg.duracaoMin/60).length)||ds[0];
+  const lista=inicios(s.dia,s.dur);const pr=(cfg.promos||[]).find(p=>p.data===s.dia);
+  const pend=store.get();
+  const durs=cfg.duracoes.filter(d=>d*60>=cfg.duracaoMin).map(d=>{const pk=(cfg.pacotes||[]).find(p=>Number(p.horas)===d);return `<button class="chip" data-dur="${d}" aria-pressed="${s.dur===d}">${pk?esc(pk.nome):durFmt(d)}${pk?`<small>${durFmt(d)}</small>`:""}</button>`}).join("");
+  return `${pend&&pend.status==="pre"&&pend.expiraEm>agora()?`<div class="info warn resume"><span>Você tem a pré-reserva <b>${esc(pend.id)}</b> aguardando pagamento.</span><button class="btn2 copy" id="continuar" style="min-height:44px">Continuar</button></div>`:""}
+  ${s.ocupado?`<div class="info erro">Esse horário acabou de ser reservado por outra pessoa. Escolha outro.</div>`:""}
+  <p class="eyebrow">Passo 1 de 4</p><h2>Quando você precisa da sala?</h2>
+  <div class="block"><b>Dia</b><div class="chips" id="chips-dia">${ds.map(k=>{const p=P(dia0(k)+12*H),h=cfg.horarios[p.dow],x=(cfg.promos||[]).find(z=>z.data===k);const lbl=k===P(agora()).key?"hoje":x?`<span class="tag">−${x.desconto}%</span>`:h&&h.aberto?MS[p.mes]:"fech.";return `<button class="chip day" data-dia="${k}" aria-pressed="${k===s.dia}" ${h&&h.aberto?"":"disabled"}><small>${DS[p.dow]}</small><b>${pad(p.dia)}</b><small>${lbl}</small></button>`}).join("")}</div></div>
+  ${pr?`<div class="info warn"><b>${esc(pr.nome)}:</b> ${pr.desconto}% de desconto neste dia.</div>`:""}
+  <div class="block"><b>Por quanto tempo?</b><div class="chips">${durs}</div></div>
+  <div class="block"><b>Horários livres · ${fmtDia(dia0(s.dia)+12*H)}</b>
+  ${lista.length?`<div class="times">${lista.map(o=>{const p=preco(o.ini,o.fim);return `<button class="time" data-ini="${o.ini}" data-fim="${o.fim}" aria-pressed="${s.sel?.ini===o.ini&&s.sel?.fim===o.fim}"><b>${hm(o.ini)}–${hm(o.fim)}</b><span>${brl(p.total)}${o.pre?` · <span class="hot">em disputa</span>`:""}</span></button>`}).join("")}</div>
+  ${lista.some(o=>o.pre)?`<div class="info">"Em disputa" quer dizer que alguém pré-reservou mas ainda não pagou. Quem enviar o comprovante primeiro fica com o horário.</div>`:""}`
+  :`<div class="empty">Não há ${durFmt(s.dur)} livres neste dia. Tente outra duração ou outro dia.</div>`}</div>
+  <details><summary>Valores e regras</summary><div class="info">
+   Hora no horário comercial: <b>${brl(cfg.precoComercial)}</b> · fora do horário: <b>${brl(cfg.precoFora)}</b><br>
+   ${(cfg.pacotes||[]).map(p=>`${esc(p.nome)} (${durFmt(Number(p.horas))}): <b>${brl(p.valor)}</b>`).join(" · ")}<br>
+   O sistema aplica sozinho o menor preço. A pré-reserva vale ${cfg.expiraHoras}h para pagamento. Cancelamentos com menos de ${cfg.cancelaHoras}h não têm reembolso; o valor vira crédito para outro dia.</div></details>`;
+}
+function tDados(){
+  const e=s.erro;
+  return `<p class="eyebrow">Passo 2 de 4</p><h2>Seus dados</h2>
+  <div class="info">${fmtDia(s.sel.ini)} · <b>${hm(s.sel.ini)}–${hm(s.sel.fim)}</b> · <button class="linkbtn" id="trocar" style="color:var(--fg);padding:0">trocar</button></div>
+  ${e.geral?`<div class="info erro">${esc(e.geral)}</div>`:""}
+  <label class="field">Nome completo<input type="text" id="f-nome" autocomplete="name" autocapitalize="words" value="${esc(s.nome)}" class="${e.nome?"bad":""}">${e.nome?`<span class="err">${e.nome}</span>`:""}</label>
+  <label class="field">WhatsApp<small>Usamos para confirmar a reserva.</small><input type="tel" id="f-whats" inputmode="tel" autocomplete="tel-national" placeholder="(31) 9 0000-0000" value="${esc(s.whats)}" class="${e.whats?"bad":""}">${e.whats?`<span class="err">${e.whats}</span>`:""}</label>
+  <label class="field">E-mail <small>opcional, para receber a confirmação por e-mail</small><input type="email" id="f-email" inputmode="email" autocomplete="email" value="${esc(s.email)}" class="${e.email?"bad":""}">${e.email?`<span class="err">${e.email}</span>`:""}</label>
+  <label class="field">Empresa <small>opcional</small><input type="text" id="f-emp" autocomplete="organization" value="${esc(s.emp)}"></label>
+  <label class="field">Motivo da reunião <small>opcional</small><input type="text" id="f-mot" value="${esc(s.motivo)}"></label>
+  <label class="check"><input type="checkbox" id="f-int" ${s.interno?"checked":""}><span>Sou cliente do Coworking<small>Use as horas do seu plano com o código da recepção.</small></span></label>
+  ${s.interno?`<label class="field">Código do cliente<input type="text" id="f-cod" autocapitalize="characters" autocomplete="off" value="${esc(s.cod)}" class="${e.cod?"bad":""}">${e.cod?`<span class="err">${e.cod}</span>`:""}</label>`:""}
+  <div class="info">Ao continuar, sua pré-reserva vale ${cfg.expiraHoras}h para pagamento e só garante a sala depois do comprovante. Cancelamentos com menos de ${cfg.cancelaHoras}h não têm reembolso; o valor vira crédito para outro dia.</div>`;
+}
+function tPagar(){
+  const r=s.res,rest=Math.max(0,r.expiraEm-agora());
+  return `<p class="eyebrow">Passo 3 de 4</p><h2>Pague com PIX</h2>
+  ${s.erro.geral?`<div class="info erro">${esc(s.erro.geral)}</div>`:""}
+  <div class="card"><span class="timer">⏱ pré-reserva válida por ${Math.floor(rest/H)}h${pad(Math.floor(rest%H/MIN))}min</span>
+   <div class="amount">${brl(r.valor)}</div>
+   <dl class="lines"><dt>Sala de reunião</dt><dd>${fmtDia(r.inicio)}<br>${hm(r.inicio)}–${hm(r.fim)}</dd><dt>Recebedor</dt><dd>Coworking Together<br>Chave CNPJ ${cnpj(cfg.pix.chave)}</dd><dt>Sua reserva</dt><dd><b>${esc(r.id)}</b></dd></dl>
+  </div>
+  <ol class="howto"><li><span>Toque em <b>Copiar código PIX</b>.</span></li><li><span>Abra o app do seu banco e escolha <b>PIX copia e cola</b>.</span></li><li><span>Cole o código e confirme o pagamento.</span></li><li><span>Volte aqui e envie o comprovante.</span></li></ol>
+  <button class="btn2 copy ${s.copiado?"done":""}" id="copiar">${s.copiado?"✓ Código copiado":"Copiar código PIX"}</button>
+  <div class="code" id="code">${esc(r.pix)}</div>
+  <details><summary>Pagar por QR Code (outro aparelho)</summary><div class="qr" id="qr"></div></details>
+  <div class="block"><b>Comprovante</b>
+   <label class="upload ${s.arquivo?"has":""}"><input type="file" id="arq" accept="image/*,application/pdf">${s.arquivo?`✓ ${esc(s.arquivo.name)}<small>Toque para trocar</small>`:`📎 Anexar comprovante<small>Foto, print ou PDF do pagamento</small>`}</label>
+   ${s.erro.arq?`<span class="err">${esc(s.erro.arq)}</span>`:""}
+  </div>
+  <button class="btn2 ghost" id="desistir">Desistir desta reserva</button>`;
+}
+const cnpj=d=>{d=String(d).replace(/\D/g,"");return d.length===14?`${d.slice(0,2)}.${d.slice(2,5)}.${d.slice(5,8)}/${d.slice(8,12)}-${d.slice(12)}`:d};
+function tFim(){
+  const r=s.res,st=r.status;
+  const ok=st==="confirmada",esp=st==="validacao";
+  const gdate=ms=>{const d=new Date(ms);return d.getUTCFullYear()+pad(d.getUTCMonth()+1)+pad(d.getUTCDate())+"T"+pad(d.getUTCHours())+pad(d.getUTCMinutes())+"00Z"};
+  const gc=`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent("Sala de reunião – Coworking Together")}&dates=${gdate(r.inicio)}/${gdate(r.fim)}&details=${encodeURIComponent("Reserva "+r.id)}&location=${encodeURIComponent(cfg.endereco||"Coworking Together, Betim")}`;
+  const wa=`https://wa.me/${String(cfg.whatsapp).replace(/\D/g,"")}?text=${encodeURIComponent("Olá! Tenho a reserva "+r.id+" da sala de reunião ("+fmtDia(r.inicio)+", "+hm(r.inicio)+"–"+hm(r.fim)+").")}`;
+  const titulo=ok?"Reserva confirmada!":esp?"Comprovante recebido!":st==="pre"?"Aguardando pagamento":"Reserva encerrada";
+  const texto=ok?"Seu horário está garantido. Até lá!":esp?"O horário já está guardado para você. Vamos conferir o PIX e confirmar pelo WhatsApp.":st==="pre"?"Pague o PIX e envie o comprovante para garantir o horário.":esc(r.rotulo||"");
+  return `<div class="card center"><div class="big-ok ${ok?"":esp?"wait":"no"}">${ok?"✓":esp?"✓":"!"}</div>
+   <h2>${titulo}</h2><p style="margin:0;color:var(--muted)">${texto}</p>
+   <div class="ref">${esc(r.id)}</div><small style="color:var(--muted)">Guarde este código para consultar sua reserva.</small></div>
+  <div class="card"><dl class="lines"><dt>Data</dt><dd>${fmtDia(r.inicio)}</dd><dt>Horário</dt><dd>${hm(r.inicio)}–${hm(r.fim)}</dd><dt>Valor</dt><dd>${r.valor?brl(r.valor):"Horas do plano"}</dd><dt>Situação</dt><dd><b>${esc(r.rotulo||"")}</b></dd></dl></div>
+  ${st==="pre"?`<button class="btn2 copy" id="irpagar">Ir para o pagamento</button>`:""}
+  ${ok||esp?`<a class="btn2" href="${gc}" target="_blank" rel="noopener">📅 Salvar na minha agenda</a>`:""}
+  <a class="btn2" href="${wa}" target="_blank" rel="noopener">💬 Falar com o Coworking</a>
+  <button class="btn2 ghost" id="nova">Fazer outra reserva</button>`;
+}
+function tConsulta(){
+  return `<h2>Minha reserva</h2><p style="margin:0;color:var(--muted)">Digite o código que apareceu ao reservar e os 4 últimos dígitos do seu WhatsApp.</p>
+  ${s.erro.geral?`<div class="info erro">${esc(s.erro.geral)}</div>`:""}
+  <label class="field">Código da reserva<input type="text" id="q-id" autocapitalize="characters" placeholder="SR-123" value="${esc(s.qid||"")}"></label>
+  <label class="field">4 últimos dígitos do WhatsApp<input type="tel" id="q-tel" inputmode="numeric" maxlength="4" value="${esc(s.qtel||"")}"></label>
+  <button class="btn2 copy" id="buscar">${s.buscando?`<span class="spinner"></span> Consultando…`:"Consultar"}</button>
+  <button class="btn2 ghost" id="voltar">Voltar para reservar</button>`;
+}
+function qr(){const el=$("#qr");if(!el||!window.QRCode)return;el.innerHTML="";try{new QRCode(el,{text:s.res.pix,width:190,height:190,colorDark:"#1F326A",colorLight:"#FFFFFF",correctLevel:QRCode.CorrectLevel.M})}catch(e){el.textContent="Use o código copia e cola."}}
+
+function barra(){
+  const bar=$("#bar"),b=$("#barin");let h="";
+  if(s.tela==="horario"){const p=s.sel?preco(s.sel.ini,s.sel.fim):null;const pp=s.sel&&P(s.sel.ini);
+    h=`<div class="sum">${p?`${DS[pp.dow]} ${pad(pp.dia)} · ${hm(s.sel.ini)}–${hm(s.sel.fim)}${p.regra?" · "+esc(p.regra):""}${p.pr?" · −"+p.pr.desconto+"%":""}<b>${brl(p.total)}</b>`:`Escolha um horário<b>—</b>`}</div><button class="cta" id="ir" aria-disabled="${!s.sel}">Continuar</button>`}
+  if(s.tela==="dados"){const p=preco(s.sel.ini,s.sel.fim);h=`<div class="sum">${hm(s.sel.ini)}–${hm(s.sel.fim)}${s.interno?" · horas do plano":""}<b>${s.interno?"a calcular":brl(p.total)}</b></div><button class="cta" id="ir">${s.enviando?`<span class="spinner"></span>Reservando…`:"Reservar"}</button>`}
+  if(s.tela==="pagar")h=`<button class="cta full" id="ir" aria-disabled="${!s.arquivo}">${s.enviando?`<span class="spinner"></span>Enviando comprovante…`:"Enviar comprovante"}</button>`;
+  bar.hidden=!h;b.innerHTML=h;const ir=$("#ir");if(ir)ir.onclick=avancar;
+}
+function lerDados(){const v=id=>{const e=$(id);return e?e.value.trim():""};s.nome=v("#f-nome");s.whats=v("#f-whats");s.email=v("#f-email");s.emp=v("#f-emp");s.motivo=v("#f-mot");if($("#f-cod"))s.cod=v("#f-cod")}
+
+async function avancar(){
+  if(s.enviando)return;
+  if(s.tela==="horario"){if(!s.sel)return;s.ocupado=false;s.erro={};go("dados");return}
+  if(s.tela==="dados"){lerDados();s.erro={};
+    if(s.nome.split(/\s+/).filter(Boolean).length<2)s.erro.nome="Digite nome e sobrenome.";
+    if(s.whats.replace(/\D/g,"").length<10)s.erro.whats="Digite o WhatsApp com DDD.";
+    if(s.email&&!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(s.email))s.erro.email="Confira o e-mail.";
+    if(s.interno&&!s.cod)s.erro.cod="Digite o código do cliente.";
+    if(Object.keys(s.erro).length){render();return}
+    s.enviando=true;barra();
+    try{const j=await api("POST",{acao:"reservar",ini:s.sel.ini,fim:s.sel.fim,nome:s.nome,whats:s.whats,email:s.email,empresa:s.emp,motivo:s.motivo,codigo:s.interno?s.cod:""},1);
+      s.res=j.reserva;store.set({id:s.res.id,token:s.res.token,status:s.res.status,expiraEm:s.res.expiraEm});
+      s.enviando=false;s.copiado=false;s.arquivo=null;go(s.res.status==="pre"?"pagar":"fim");carregar(true);
+    }catch(e){s.enviando=false;
+      if(/acabou de ser reservado/.test(e.message)){s.ocupado=true;s.sel=null;await carregar();go("horario");return}
+      if(/código de cliente/i.test(e.message))s.erro.cod=e.message;else s.erro.geral=e.message;render()}
+    return}
+  if(s.tela==="pagar"){
+    if(!s.arquivo){s.erro={arq:"Anexe o comprovante do PIX para garantir o horário."};render();return}
+    s.enviando=true;s.erro={};barra();
+    try{const arquivo=await prepararArquivo(s.arquivo);
+      const j=await api("POST",{acao:"comprovante",id:s.res.id,token:s.res.token,arquivo},1);
+      s.res=j.reserva;store.set({id:s.res.id,token:s.res.token,status:s.res.status,expiraEm:s.res.expiraEm});s.enviando=false;go("fim");carregar(true);
+    }catch(e){s.enviando=false;s.erro={geral:e.message+(e.rede?" Seu comprovante não foi enviado; toque em Enviar de novo.":"")};
+      if(/expirou|outro cliente/i.test(e.message)){s.res.status=/expirou/.test(e.message)?"expirada":"derrubada";s.res.rotulo=e.message;store.set(null);go("fim");return}
+      render()}
+  }
+}
+/* Fotos são reduzidas antes do envio (mais rápido no 4G); PDFs vão como estão */
+function prepararArquivo(file){
+  return new Promise((ok,fail)=>{
+    const lerB64=blob=>{const fr=new FileReader();fr.onload=()=>ok({nome:file.name,tipo:blob.type||file.type,base64:String(fr.result).split(",")[1]});fr.onerror=()=>fail(new Error("Não foi possível ler o arquivo."));fr.readAsDataURL(blob)};
+    if(!/^image\/(jpeg|png|webp)/.test(file.type)){if(file.size>10e6)return fail(Object.assign(new Error("Arquivo maior que 10 MB. Envie um print do comprovante."),{publico:true}));return lerB64(file)}
+    const img=new Image(),url=URL.createObjectURL(file);
+    img.onload=()=>{const max=1600,k=Math.min(1,max/Math.max(img.width,img.height));const c=document.createElement("canvas");c.width=Math.round(img.width*k);c.height=Math.round(img.height*k);
+      const g=c.getContext("2d");g.fillStyle="#fff";g.fillRect(0,0,c.width,c.height);g.drawImage(img,0,0,c.width,c.height);URL.revokeObjectURL(url);
+      c.toBlob(b=>b?lerB64(b):lerB64(file),"image/jpeg",.82)};
+    img.onerror=()=>{URL.revokeObjectURL(url);lerB64(file)};img.src=url;
+  });
+}
+async function abrirPorToken(id,token){
+  try{const j=await api("GET",{acao:"consultar",id,token});s.res=j.reserva;store.set(s.res.status==="pre"?{id:s.res.id,token:s.res.token,status:"pre",expiraEm:s.res.expiraEm}:null);s.copiado=false;s.arquivo=null;go(s.res.status==="pre"?"pagar":"fim")}
+  catch(e){store.set(null);s.erro={};render()}
+}
+function bind(){
+  document.querySelectorAll("[data-dia]").forEach(b=>b.onclick=()=>{s.dia=b.dataset.dia;s.sel=null;s.ocupado=false;render()});
+  document.querySelectorAll("[data-dur]").forEach(b=>b.onclick=()=>{s.dur=+b.dataset.dur;s.sel=null;render()});
+  document.querySelectorAll(".time").forEach(b=>b.onclick=()=>{s.sel={ini:+b.dataset.ini,fim:+b.dataset.fim};render()});
+  const sel=document.querySelector('.chip.day[aria-pressed="true"]');if(sel&&!s._rolou){sel.scrollIntoView({block:"nearest",inline:"center"});s._rolou=true}
+  const on=(id,f)=>{const e=$(id);if(e)e.onclick=f};
+  on("#trocar",()=>{lerDados();go("horario")});
+  on("#continuar",()=>{const p=store.get();if(p)abrirPorToken(p.id,p.token)});
+  const ci=$("#f-int");if(ci)ci.onchange=()=>{lerDados();s.interno=ci.checked;render()};
+  const fw=$("#f-whats");if(fw)fw.oninput=()=>{let d=fw.value.replace(/\D/g,"");if(d.length>11&&d.startsWith("55"))d=d.slice(2);d=d.slice(0,11);fw.value=d.length>6?`(${d.slice(0,2)}) ${d.slice(2,d.length-4)}-${d.slice(-4)}`:d.length>2?`(${d.slice(0,2)}) ${d.slice(2)}`:d};
+  on("#copiar",()=>{const t=s.res.pix,ok=()=>{s.copiado=true;render()};
+    if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(t).then(ok,()=>selTexto());else selTexto()});
+  const a=$("#arq");if(a)a.onchange=()=>{s.arquivo=a.files[0]||null;s.erro={};render()};
+  on("#desistir",async()=>{if(!s.confirmaDesistir){s.confirmaDesistir=true;$("#desistir").textContent="Toque de novo para confirmar a desistência";return}
+    s.confirmaDesistir=false;try{await api("POST",{acao:"desistir",id:s.res.id,token:s.res.token},1)}catch(e){}store.set(null);Object.assign(s,{res:null,sel:null,arquivo:null});await carregar();go("horario")});
+  on("#irpagar",()=>go("pagar"));
+  on("#nova",()=>{if(s.res&&s.res.status!=="pre")store.set(null);Object.assign(s,{res:null,sel:null,arquivo:null,copiado:false});carregar().then(()=>go("horario"))});
+  on("#buscar",async()=>{s.qid=$("#q-id").value.trim();s.qtel=$("#q-tel").value.trim();s.erro={};if(!s.qid||s.qtel.length<4){s.erro.geral="Preencha o código e os 4 dígitos.";render();return}
+    s.buscando=true;render();try{const j=await api("GET",{acao:"consultar",id:s.qid,tel:s.qtel});s.res=j.reserva;s.buscando=false;if(s.res.status==="pre")store.set({id:s.res.id,token:s.res.token,status:"pre",expiraEm:s.res.expiraEm});s.copiado=false;s.arquivo=null;go("fim")}
+    catch(e){s.buscando=false;s.erro.geral=e.message;render()}});
+  on("#voltar",()=>{s.erro={};go("horario")});
+}
+function selTexto(){const el=$("#code");const r=document.createRange();r.selectNodeContents(el);const g=getSelection();g.removeAllRanges();g.addRange(r);try{document.execCommand("copy");s.copiado=true;render()}catch(e){}}
+$("#minha").onclick=()=>{s.erro={};go("consulta")};
+
+/* atualiza os horários a cada minuto enquanto o cliente escolhe */
+setInterval(async()=>{if(s.tela==="horario"&&!document.hidden){await carregar(true);if(s.sel&&bloqueado(s.sel.ini,s.sel.fim)){s.sel=null;s.ocupado=true}if(s.tela==="horario")render()}
+  else if(s.tela==="pagar"&&!s.enviando){const t=document.querySelector(".timer");if(t&&s.res){const r=Math.max(0,s.res.expiraEm-agora());t.textContent=`⏱ pré-reserva válida por ${Math.floor(r/H)}h${pad(Math.floor(r%H/MIN))}min`}}},60000);
+document.addEventListener("visibilitychange",()=>{if(!document.hidden&&s.tela==="horario"&&Date.now()-carregadoEm>30000)carregar(true).then(render)});
+
+(async function iniciar(){
+  await carregar();render();
+  const p=store.get();
+  if(cfg&&p&&p.status==="pre"&&p.expiraEm>agora())render(); // mostra o aviso "Continuar"
+})();
+</script>
+</body>
+</html>
